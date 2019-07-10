@@ -17,6 +17,9 @@ import time
 
 import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+
 def get_session():
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -70,7 +73,7 @@ def process_image(filename, iterate):
     boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
     print("processing time: ", time.time() - start)
     grad = iterate([np.expand_dims(image, axis=0)])
-    print("gradient: ", grad)
+    # print("gradient: ", grad)
 
     # correct for image scale
     boxes /= scale
@@ -88,18 +91,33 @@ def process_image(filename, iterate):
 
         caption = "{} {:.3f}".format(labels_to_names[label], score)
         draw_caption(draw, b, caption)
-        print(caption)
+        # print(caption)
 
     plt.figure(figsize=(15, 15))
     plt.axis('off')
     plt.imshow(draw)
     plt.savefig('processed_' + filename)
 
-    return grad
+    return image, grad, scale
+
+def dfdtau(grad_wrt_input, I, A=1, tau=1):
+    dIdtau = (A - I)*np.exp(-tau)
+    return np.multiply(grad_wrt_input,dIdtau).sum()
+
+def dfdA(grad_wrt_input, I, A=1, tau=1):
+    dIdA = 1 - np.exp(-tau)
+    return np.multiply(grad_wrt_input,dIdA).sum()
+
 
 # load image
-#image = read_image_bgr('driveway-2.jpg')
-grad_wrt_input = process_image('1.png', iterate)
+image, grad_wrt_input, scale = process_image('1.png', iterate)
+grad_wrt_input = np.squeeze(grad_wrt_input)
+
+grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=1)
+print(grad_wrt_tau)
+
+grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=1)
+print(grad_wrt_A)
 
 # process_image('2.png')
 # process_image('3.png')
