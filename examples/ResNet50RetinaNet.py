@@ -102,22 +102,59 @@ def process_image(filename, iterate):
 
 def dfdtau(grad_wrt_input, I, A=1, tau=1):
     dIdtau = (A - I)*np.exp(-tau)
-    return np.multiply(grad_wrt_input,dIdtau).sum()
+    return np.multiply(grad_wrt_input, dIdtau).sum()
 
 def dfdA(grad_wrt_input, I, A=1, tau=1):
     dIdA = 1 - np.exp(-tau)
-    return np.multiply(grad_wrt_input,dIdA).sum()
+    return np.multiply(grad_wrt_input, dIdA).sum()
 
 
 # load image
 image, grad_wrt_input, scale = process_image('1.png', iterate)
 grad_wrt_input = np.squeeze(grad_wrt_input)
 
-grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=1)
-print(grad_wrt_tau)
+grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_tau: ', grad_wrt_tau)
 
-grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=1)
-print(grad_wrt_A)
+grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_A: ', grad_wrt_A)
+
+image, grad_wrt_input, scale = process_image('2.png', iterate)
+grad_wrt_input = np.squeeze(grad_wrt_input)
+
+grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_tau: ', grad_wrt_tau)
+
+grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_A: ', grad_wrt_A)
+
+image, grad_wrt_input, scale = process_image('3.png', iterate)
+grad_wrt_input = np.squeeze(grad_wrt_input)
+
+grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_tau: ', grad_wrt_tau)
+
+grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_A: ', grad_wrt_A)
+
+image, grad_wrt_input, scale = process_image('4.png', iterate)
+grad_wrt_input = np.squeeze(grad_wrt_input)
+
+grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_tau: ', grad_wrt_tau)
+
+grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_A: ', grad_wrt_A)
+
+image, grad_wrt_input, scale = process_image('7.png', iterate)
+grad_wrt_input = np.squeeze(grad_wrt_input)
+
+grad_wrt_tau = dfdtau(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_tau: ', grad_wrt_tau)
+
+grad_wrt_A = dfdA(grad_wrt_input, image, A=1, tau=0)
+print('grad_wrt_A: ', grad_wrt_A)
+
 
 # process_image('2.png')
 # process_image('3.png')
