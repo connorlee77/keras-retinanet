@@ -53,30 +53,30 @@ def detect_classify(image):
 
     return image, detections
 
-def dfdtau(grad_wrt_input, I, A, tau):
-    dIdtau = (A - I)*np.exp(-tau)
-    return np.multiply(grad_wrt_input, dIdtau).sum()
+# def dfdtau(grad_wrt_input, I, A, tau):
+#     dIdtau = (A - I)*np.exp(-tau)
+#     return np.multiply(grad_wrt_input, dIdtau).sum()
 
-def dfdA(grad_wrt_input, I, A, tau):
-    dIdA = 1 - np.exp(-tau)
-    return np.multiply(grad_wrt_input, dIdA).sum()
+# def dfdA(grad_wrt_input, I, A, tau):
+#     dIdA = 1 - np.exp(-tau)
+#     return np.multiply(grad_wrt_input, dIdA).sum()
 
-def getGradients(image, A, tau):
+# def getGradients(image, A, tau):
 
-    # preprocess image for network
-    image = preprocess_image(image)
-    processed_image, scale = resize_image(image)
+#     # preprocess image for network
+#     image = preprocess_image(image)
+#     processed_image, scale = resize_image(image)
 
-    print(processed_image) 
-    print(processed_image.shape) 
+#     print(processed_image) 
+#     print(processed_image.shape) 
     
-    grad_wrt_input = iterate([np.expand_dims(processed_image, axis=0)])
-    grad_wrt_input = np.squeeze(grad_wrt_input)
+#     grad_wrt_input = iterate([np.expand_dims(processed_image, axis=0)])
+#     grad_wrt_input = np.squeeze(grad_wrt_input)
 
-    grad_wrt_tau = dfdtau(grad_wrt_input, processed_image, A, tau)
-    grad_wrt_A = dfdA(grad_wrt_input, processed_image, A, tau)
+#     grad_wrt_tau = dfdtau(grad_wrt_input, processed_image, A, tau)
+#     grad_wrt_A = dfdA(grad_wrt_input, processed_image, A, tau)
 
-    return processed_image, grad_wrt_tau, grad_wrt_A
+#     return processed_image, grad_wrt_tau, grad_wrt_A
 
 
 # set the modified tf session as backend in keras
@@ -113,5 +113,6 @@ for i in range(10):
     print(detections)
     tau += 0.1
     image = image*np.exp(-tau) + A*(1 - np.exp(-tau))
-
-
+    plt.figure()
+    plt.imshow(image)
+    plt.show()
